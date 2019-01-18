@@ -30,7 +30,7 @@ RSpec.describe Item, type: :model do
 
   describe 'validations' do
     subject(:item) { create(:item) }
-    
+
     context 'when factory is valid' do
       it { expect{ item }.to change(described_class, :count).by(1) }
       it { is_expected.to be_valid }
@@ -52,10 +52,10 @@ RSpec.describe Item, type: :model do
       it { expect(item.price).to eq(item.original_price) }
     end
 
-    context 'price is a float' do
+    context '#price returns a float' do
       subject(:item) { build(:item) }
 
-      it { expect(subject.price.class).to be(Float) }
+      it { expect(item.price.class).to be(Float) }
     end
 
     context "when the item has a nil discount_percentage" do
@@ -69,5 +69,19 @@ RSpec.describe Item, type: :model do
 
       it { expect(item.price).to eq(80.00) }
     end
+  end
+
+  describe '.average_price' do
+    subject(:subject) { described_class }
+
+    context 'when the database is empty .average_price returns nil' do
+      it { expect(subject.average_price).to eq(nil) }
+    end
+
+    context '.average_price returns a float' do
+      let!(:item) { create(:item) }
+      it { expect(subject.average_price.class).to be(Float) }
+    end
+
   end
 end
